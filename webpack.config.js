@@ -2,6 +2,7 @@ const HtmlWebPackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
+  mode: 'development',
   module: {
     rules: [
       {
@@ -27,6 +28,18 @@ module.exports = {
             options: {
               name: '[name].[ext]',
               outputPath: 'images/'
+            }
+          }
+        ]
+      },
+      {
+        test: /\.(css)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'css/'
             }
           }
         ]

@@ -1,0 +1,68 @@
+html {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  margin: 0;
+  height: 100%;
+  font-family: sans-serif;
+}
+
+#fruitmachine {
+  height: 100%;
+}
+
+.tank {
+  height: 100vh;
+  background: url('../images/tank_empty.jpg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: 50% 0;
+  position: relative;
+}
+
+
+.slots {
+  position: absolute;
+  top: 22vw;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.slots span {
+  display: block;
+  font-size: 16vw;
+  padding: 0 5vw;
+}
+
+.controls {
+  position: absolute;
+  top: 70vw;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.controls span {
+  display: block;
+  font-size: 4vh;
+  padding: 0 2vh;
+}
+
+@media screen and (orientation: landscape) {
+  .slots {
+    top: 17vh;
+  }
+
+  .slots span {
+    padding: 0 4vh;
+    font-size: 13vh;
+  }
+
+  .controls {
+    top: 60vh;
+  }
+}
+
