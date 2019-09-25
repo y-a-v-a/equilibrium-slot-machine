@@ -15,7 +15,7 @@ class FruitMachine extends React.Component {
 
     this.state = {
       isRunning: false,
-      count: 10,
+      count: 2217,
       slotValues: [...'🏀'.repeat(this.slots)]
     }
   }
