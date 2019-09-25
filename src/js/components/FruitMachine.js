@@ -92,7 +92,7 @@ class FruitMachine extends React.Component {
     const {count, slotValues} = this.state;
 
     return (
-      <div className="tank">
+      <div className="tank" title="Click or tap the red button">
         <img src="images/tank_empty.jpg" alt="" />
         <Slots slotValues={slotValues} />
         <div className="controls">
