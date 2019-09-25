@@ -93,10 +93,18 @@ class FruitMachine extends React.Component {
 
     return (
       <div className="tank">
+        <img src="images/tank_empty.jpg" alt="" />
         <Slots slotValues={slotValues} />
         <div className="controls">
-          <Credit count={count} />
-          <Button clickHandler={this.clickHandler} />
+          <h1>ax710.org, y-a-v-a.org</h1>
+          <em>Dutch</em>
+          <h3 class="title">Three Ball Total Equilibrium Slot Machine&nbsp;&nbsp;<i>2018/2019</i></h3>
+          <p class="material">pixels on screen
+            <span>
+              <Credit count={count} />
+              <Button clickHandler={this.clickHandler} />
+            </span>
+          </p>
         </div>
       </div>
     )

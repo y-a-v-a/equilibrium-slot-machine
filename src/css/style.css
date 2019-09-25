@@ -6,7 +6,7 @@ html {
 body {
   margin: 0;
   height: 100%;
-  font-family: sans-serif;
+  font-family: Helvetica, Arial, sans-serif;
 }
 
 #fruitmachine {
@@ -14,55 +14,160 @@ body {
 }
 
 .tank {
-  height: 100vh;
-  background: url('../images/tank_empty.jpg');
-  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  background: url('../images/tank_back_portrait.jpg');
   background-size: contain;
-  background-position: 50% 0;
-  position: relative;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: auto 76vh 24vh auto;
+  grid-template-rows: auto 14vh 20vh 32vh 27vh 7vh auto;
 }
 
+.tank img {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 7;
+  align-self: stretch;
+  justify-self: stretch;
+  order: 1;
+}
 
 .slots {
-  position: absolute;
-  top: 22vw;
   width: 100%;
   display: flex;
   justify-content: center;
+  order: 2;
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 3;
+  grid-row-end: 4;
+  align-self: end;
 }
 
 .slots span {
   display: block;
-  font-size: 16vw;
-  padding: 0 5vw;
+  padding: 0 3.7vh;
+  font-size: 12vh;
+}
+
+.slots span:last-child {
+  padding-right: 0;
+}
+
+.slots span:first-child {
+  padding-left: 0;
 }
 
 .controls {
-  position: absolute;
-  top: 70vw;
-  width: 100%;
+  background: #f0f0f0;
+  box-sizing: border-box;
+  box-shadow: 0px 2px 4px #00000022;
+  padding: 20px;
+  order: 3;
+  grid-column-start: 3;
+  grid-column-end: auto;
+  grid-row-start: 3;
+  grid-row-end: auto;
+  overflow: hidden;
+  font-size: 86%;
+  line-height: 1.5;
+  min-height: 24vh;
+}
+
+.controls h1 {
+  font-size: 1.5em;
+  margin: 0;
+  font-weight: normal;
+}
+
+.controls em {
+  font-style: normal;
+}
+
+.controls h3 i {
+  font-weight: normal;
+  font-style: normal;
+}
+
+.title {
+  margin-bottom: 2em;
+}
+
+.controls span span {
+  display: inline-block;
+}
+
+.button {
+  cursor: pointer;
+  padding: 0 0 0 1vh;
+}
+
+.material {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
 }
 
-.controls span {
-  display: block;
-  font-size: 4vh;
-  padding: 0 2vh;
-}
+@media (orientation: portrait) {
+  .tank {
+    grid-template-columns: 100vw;
+    grid-template-rows: 0 18vw 26vw 42vw 35vw 9vw auto;
+  }
 
-@media screen and (orientation: landscape) {
+  .tank img {
+    grid-column-start: 1;
+    grid-column-end: 1;
+  }
+
   .slots {
-    top: 17vh;
+    grid-column-start: 1;
+    grid-column-end: 1;
   }
 
   .slots span {
-    padding: 0 4vh;
-    font-size: 13vh;
+    padding: 0 4.8vw;
+    font-size: 15.6vw;
   }
 
   .controls {
-    top: 60vh;
+    grid-column-start: 1;
+    grid-column-end: 1;
+    grid-row-start: 5;
+    grid-row-end: auto;
+    max-width: 40vw;
+    justify-self: center;
+    font-size: 100%;
   }
 }
 
+@media screen and (max-height: 768px) and (orientation: landscape) {
+  .controls {
+    height: 38vh;
+    width: 33vh;
+  }
+}
+
+@media screen and (max-height: 414px) and (orientation: landscape) {
+  .controls {
+    width: 45vh;
+    height: 65vh;
+    font-size: 72%;
+  }
+}
+
+@media screen and (max-width: 414px) and (orientation: portrait) {
+  .tank {
+    width: 100%;
+    height: 100%;
+    background: url('../images/tank_back_landscape.jpg');
+  }
+
+  .controls {
+    grid-row-start: 6;
+    max-width: 66vw;
+    height: 40vw;
+    font-size: 66%;
+    padding: 16px;
+  }
+}
