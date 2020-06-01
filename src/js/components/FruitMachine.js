@@ -89,7 +89,12 @@ class FruitMachine extends React.Component {
   }
 
   render() {
-    const {count, slotValues} = this.state;
+    const {count, slotValues, isRunning} = this.state;
+
+    const nameSpaces = {
+      "xmlns:dct": "http://purl.org/dc/terms/",
+      "xmlns:cc": "http://creativecommons.org/ns#"
+    };
 
     return (
       <div className="tank" title="Click or tap the red button">
@@ -97,18 +102,26 @@ class FruitMachine extends React.Component {
         <Slots slotValues={slotValues} />
         <div className="controls">
           <div>
-            <h1>ax710.org, y-a-v-a.org</h1>
-            <em>Dutch</em>
-            <h3 className="title">Three Ball Total Equilibrium Slot Machine&nbsp;&nbsp;<i>2018/2019</i></h3>
-            <p className="material">pixels on screen
+            <h1>ax710.org and y-a-v-a.org</h1>
+            <h3 className="title">Three Ball Total Equilibrium Slot Machine <i>2018/2019</i></h3>
+            <p className="material">pixels on screen<br/><br/>
               <span>
                 <Credit count={count} />
-                <Button clickHandler={this.clickHandler} />
+                <Button clickHandler={this.clickHandler} isRunning={isRunning} />
               </span>
             </p>
           </div>
           <div>
-            <p>Courtersy of the artists</p>
+            <p {...nameSpaces} className="license-text">
+              <span rel="dct:title">Three Ball Total Equilibrium Slot Machine</span> by <a rel="cc:attributionURL" href="www.ax710.org">
+                <span rel="cc:attributionName">ax710&nbsp;and&nbsp;y_a_v_a</span>
+              </a><br/>CC&nbsp;BY-SA&nbsp;4.0&nbsp;
+              <a href="https://creativecommons.org/licenses/by-sa/4.0">
+                <img style={{height:"1em",marginLeft: "3px",verticalAlign:"text-bottom"}} src="https://search.creativecommons.org/static/img/cc_icon.svg" />
+                <img style={{height:"1em",marginLeft: "3px",verticalAlign:"text-bottom"}} src="https://search.creativecommons.org/static/img/cc-by_icon.svg" />
+                <img style={{height:"1em",marginLeft: "3px",verticalAlign:"text-bottom"}} src="https://search.creativecommons.org/static/img/cc-sa_icon.svg" />
+              </a>
+            </p>
           </div>
         </div>
       </div>

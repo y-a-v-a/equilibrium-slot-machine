@@ -6,8 +6,10 @@ class Button extends React.Component {
   }
 
   render() {
+    const {isRunning, clickHandler} = this.props;
+
     return (
-      <span className="button" onClick={this.props.clickHandler}>🔴</span>
+      <span className={`button ${isRunning ? '' : 'inactive'}`} onClick={clickHandler}>🔴</span>
     );
   }
 }

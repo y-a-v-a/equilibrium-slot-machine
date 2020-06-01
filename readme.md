@@ -14,4 +14,4 @@ Sources:
 
 ## License
 
-MIT - (c) 2018-2019 ax710.org, y-a-v-a.org
+MIT - (c) 2018-2020 ax710.org, y-a-v-a.org
