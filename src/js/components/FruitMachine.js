@@ -186,7 +186,7 @@ class FruitMachine extends React.Component {
           </div>
           <div>
             <p {...nameSpaces} className="license-text">
-              <span rel="dct:title">Three Ball Total Equilibrium Slot Machine</span> by <a rel="cc:attributionURL" href="www.ax710.org">
+              <span rel="dct:title">Three Ball Total Equilibrium Slot Machine</span> by <a rel="cc:attributionURL" href="http://www.ax710.org">
                 <span rel="cc:attributionName">ax710&nbsp;and&nbsp;y_a_v_a</span>
               </a><br/>CC&nbsp;BY-SA&nbsp;4.0&nbsp;
               <a href="https://creativecommons.org/licenses/by-sa/4.0">
