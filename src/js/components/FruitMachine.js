@@ -1,3 +1,6 @@
+/**
+ * @author Vincent Bruijn <vebruijn@gmail.com>
+ */
 import React from 'react';
 import Credit from './Credit';
 import Button from './Button';
@@ -7,7 +10,11 @@ class FruitMachine extends React.Component {
 
   constructor(props) {
     super(props);
-    this.options = [...'⚽🏀🏈⚾🎾🏐🏉🎱'];
+    this.reels = [
+      [...'🏀⚽🎾🏐⚾🏉⚽🎾⚾⚽🎱⚽🏈🎾⚾⚽🏉🏐🎾⚾'],
+      [...'🏀🏈🏐🏈🎾🏈🏐🏈⚽🏈🎱🏈⚾🏐🎾🏈🏐🏉🏈🏐'],
+      [...'🏀⚾⚽⚾🎾⚾⚽⚾🎱⚾⚽⚾🏈⚾⚽⚾🏉⚾⚽⚾']
+    ];
     this.slots = 3;
     this.timerIds = [];
 
@@ -16,19 +23,24 @@ class FruitMachine extends React.Component {
     this.state = {
       isRunning: false,
       count: 2217,
-      slotValues: [...'🏀'.repeat(this.slots)]
+      slotValues: [...'🏀'.repeat(this.slots)],
+      tries: 0,
+      success: 0,
+      direction: 0
     }
   }
 
   clickHandler(event) {
-    const {isRunning, count} = this.state;
+    const {isRunning, count, success, tries} = this.state;
     if (isRunning || count <= 0) {
       return;
     }
 
     this.setState(state => ({
       isRunning: !state.isRunning,
-      count: (state.count - 1)
+      count: (state.count - 1),
+      tries: (tries + 1),
+      direction: 0
     }));
 
     let promises = [];
@@ -41,55 +53,116 @@ class FruitMachine extends React.Component {
 
       this.setState(state => ({
         isRunning: false,
-        count: state.count + score
+        count: state.count + score,
+        success: score > 0 ? (success + 1): success,
+        direction: !!score ? 1 : -1
       }));
+
+      console.log(this.state.tries, this.state.success, (this.state.success/this.state.tries))
     });
   }
 
   runnerPromise(id) {
     let timerId;
     let newSlotValue;
+    const fps = 24;
+    const baseInterval = Math.floor(1e3 / fps);
+    const reelLength = this.reels[0].length;
 
     return new Promise((resolve, reject) => {
-      let runs = ~~(Math.random() * 10) + 20;
+      const randomReelIndex = Math.floor(Math.random() * reelLength);
+      // minimum run time is about 1500ms for first reel
+      let totalRunsForSlot = randomReelIndex + ((id + 1) * (fps * 1.5));
 
-      const runner = runs => {
-        if (runs === 0) {
+      const runner = currentRun => {
+        if (currentRun === totalRunsForSlot) {
           clearTimeout(timerId);
           return resolve(newSlotValue);
         }
-        let newRuns = runs - 1;
-        newSlotValue = this.options[~~(Math.random() * this.options.length)];
+        newSlotValue = this.reels[id][currentRun % reelLength];
 
         this.setState(state => {
           state.slotValues[id] = newSlotValue;
           return state;
         });
 
-        timerId = setTimeout(runner, (800 / runs), newRuns);
+        let nextRun = currentRun + 1;
+        // ease the last 8 steps
+        const isEase = nextRun > (totalRunsForSlot - 8);
+        let interval = baseInterval;
+        if (isEase) {
+          interval = 1e3 / ((totalRunsForSlot - nextRun + 1) * 2.5);
+        }
+
+        timerId = setTimeout(runner, interval, nextRun);
       };
 
-      runner(runs);
+      runner(0);
     });
   }
 
   defineScore(result) {
-    const score = result.reduce((acc, el) => {
-      return acc.indexOf(el) > -1 ? acc : acc.push(el), acc;
-    }, []);
+    const res = result.join('');
+    let score = 0;
 
-    switch(score.length) {
-      case 1:
-        return 5;
-      case 2:
-        return 2;
-      default:
-        return 0;
+    switch(true) {
+      case(res === '🏀🏀🏀'):
+        score = 400;
+        break;
+      case(res.startsWith('🏀🏀')):
+        score = 2;
+        break;
+      case(res.startsWith('🏀')):
+        score = 1;
+        break;
+      case(res === '⚽⚽⚽'):
+        score = 14;
+        break;
+      case(res === '🏈🏈🏈'):
+        score = 18;
+        break;
+      case(res === '⚾⚾⚾'):
+        score = 10;
+        break;
+      case(res === '🎾🎾🎾'):
+        score = 50;
+        break;
+      case(/^🏐🏐/.test(res)):
+        score = 5;
+        break;
+      case(res === '🏉🏉🏉'):
+        score = 100;
+        break;
+      case(res === '🎱🎱🎱'):
+        score = 200;
+        break;
+      case(/^🏐/.test(res)):
+        score = 2;
+        break;
+      case(res === '🏈🏈🏀'):
+        score = 18;
+        break;
+      case(res === '⚽⚽🏀'):
+        score = 14;
+        break;
+      case(res === '⚾⚾🏀'):
+        score = 10;
+        break;
+      case(/^🎾🎾/.test(res)):
+        score = 5;
+        break;
+      case(/^🏉/.test(res)):
+        score = 2;
+        break;
     }
+
+    console.log('score:',score, score * 1e4);
+
+    return score;
   }
 
   render() {
-    const {count, slotValues, isRunning} = this.state;
+    const {count, slotValues, isRunning, direction} = this.state;
 
     const nameSpaces = {
       "xmlns:dct": "http://purl.org/dc/terms/",
@@ -106,7 +179,7 @@ class FruitMachine extends React.Component {
             <h3 className="title">Three Ball Total Equilibrium Slot Machine <i>2018/2019</i></h3>
             <p className="material">pixels on screen<br/><br/>
               <span>
-                <Credit count={count} />
+                <Credit count={count} direction={direction} />
                 <Button clickHandler={this.clickHandler} isRunning={isRunning} />
               </span>
             </p>

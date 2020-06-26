@@ -1,14 +1,14 @@
 {
   "name": "koonsmachine",
   "version": "0.0.1",
-  "description": "Jeff Koons Fruit Machine",
+  "description": "Three Ball Total Equilibrium Tank Slot Machine based on a work by Jeff Koons",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode production",
     "dev": "webpack --mode development --watch"
   },
-  "author": "v@y-a-v-a.org",
+  "author": "vebruijn@gmail.com",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.6.2",

@@ -1,3 +1,6 @@
+/**
+ * @author Vincent Bruijn <vebruijn@gmail.com>
+ */
 import css from './css/style.css';
 import tank from './images/tank_empty.jpg';
 import tank_p from './images/tank_back_portrait.jpg';
