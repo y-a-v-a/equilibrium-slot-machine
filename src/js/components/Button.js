@@ -1,3 +1,6 @@
+/**
+ * @author Vincent Bruijn <vebruijn@gmail.com>
+ */
 import React from 'react';
 
 class Button extends React.Component {
