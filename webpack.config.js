@@ -47,7 +47,17 @@ module.exports = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(),
+    // new CleanWebpackPlugin({
+    //   cleanOnceBeforeBuildPatterns: [
+    //     '**/*','!index.html',
+    //     '!favicon.png'
+    //   ],
+    //   cleanAfterEveryBuildPatterns: [
+    //     '!index.html',
+    //     '!favicon.png'
+
+    //   ]
+    // }),
     new HtmlWebPackPlugin({
       template: "./src/index.html",
       filename: "./index.html",

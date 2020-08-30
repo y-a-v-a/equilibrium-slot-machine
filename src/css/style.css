@@ -174,6 +174,30 @@ a {
   animation-iteration-count: 1;
 }
 
+.payout {
+  display: flex;
+  justify-content: space-around;
+}
+
+table {
+  border-collapse: collapse;
+  border: 2px solid #eee;
+}
+
+td {
+  text-align: center;
+  padding: 5px 5px;
+}
+
+.last-cell {
+  text-align: right;
+  width: 39px;
+}
+
+.last-row, [rowspan] {
+  border-bottom: 2px solid #eee;
+}
+
 @media (orientation: portrait) {
   .tank {
     grid-template-columns: 100vw;

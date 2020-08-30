@@ -5,6 +5,7 @@ import React from 'react';
 import Credit from './Credit';
 import Button from './Button';
 import Slots from './Slots';
+import Payout from './Payout';
 import Attribution from './Attribution';
 
 class FruitMachine extends React.Component {
@@ -179,8 +180,12 @@ class FruitMachine extends React.Component {
                 <Button clickHandler={this.clickHandler} isRunning={isRunning} />
               </span>
             </p>
-          </div>
-          <div>
+            <div>
+              <h3>🎰</h3>
+              <div className="payout">
+              <Payout/>
+              </div>
+            </div>
           </div>
           <Attribution />
         </div>
