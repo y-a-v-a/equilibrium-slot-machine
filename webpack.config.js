@@ -1,5 +1,6 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 
 module.exports = {
   module: {
@@ -10,12 +11,15 @@ module.exports = {
         use: {
           loader: "babel-loader"
         }
-      },
-      {
-        test: /\.html$/,
+      },{
+        test: /\.(css)$/,
         use: [
           {
-            loader: "html-loader"
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'css/'
+            }
           }
         ]
       },
@@ -31,18 +35,6 @@ module.exports = {
           }
         ]
       },
-      {
-        test: /\.(css)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-              outputPath: 'css/'
-            }
-          }
-        ]
-      }
     ]
   },
   plugins: [
@@ -50,7 +42,25 @@ module.exports = {
     new HtmlWebPackPlugin({
       template: "./src/index.html",
       filename: "./index.html",
-      favicon: 'src/favicon.png'
-    })
+    }),
+    new FaviconsWebpackPlugin({
+      logo: './basket-ball-spalding-3.png',
+      prefix: '',
+      cache: true,
+      favicons: {
+        path: '',
+        appName: 'Three Ball Total Equilibrium Slot Machine',
+        appShortName: 'Three Ball Slot Machine',
+        developerName: 'ax710 and y-a-v-a',
+        developerURL: 'http://www.infrath.in',
+        appleStatusBarStyle: 'black',
+        start_url: '/',
+        icons: {
+          appleStartup: false,
+          yandex: false,
+          coast: false
+        }
+      }
+    }),
   ]
 };

@@ -8,7 +8,7 @@ body {
   height: 100%;
   font-family: Helvetica, Arial, sans-serif;
   color: #262626;
-  line-height: 1.5;
+  line-height: 1.25;
 }
 
 p {
@@ -52,6 +52,7 @@ a {
   grid-row-start: 3;
   grid-row-end: 4;
   align-self: end;
+  line-height: 1.5;
 }
 
 .slots span {
