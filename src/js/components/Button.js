@@ -3,18 +3,12 @@
  */
 import React from 'react';
 
-class Button extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+const Button = ({ isRunning, clickHandler }) => {
+  return (
+    <span className={`button ${isRunning ? '' : 'inactive'}`} onClick={clickHandler}>
+      🔴
+    </span>
+  );
+};
 
-  render() {
-    const {isRunning, clickHandler} = this.props;
-
-    return (
-      <span className={`button ${isRunning ? '' : 'inactive'}`} onClick={clickHandler}>🔴</span>
-    );
-  }
-}
-
-export default Button;
+export default React.memo(Button);

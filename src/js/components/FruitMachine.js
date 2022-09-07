@@ -1,192 +1,143 @@
 /**
  * @author Vincent Bruijn <vebruijn@gmail.com>
  */
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Credit from './Credit';
 import Button from './Button';
 import Slots from './Slots';
 import Attribution from './Attribution';
+import Title from './Title';
+import Image from './Image';
+import { defineScore } from '../utils/defineScore.js';
 
-class FruitMachine extends React.Component {
+const reels = [
+  [...'🏀⚽🎾🏐⚾🏉⚽🎾⚾⚽🎱⚽🏈🎾⚾⚽🏉🏐🎾⚾'],
+  [...'🏀🏈🏐🏈🎾🏈🏐🏈⚽🏈🎱🏈⚾🏐🎾🏈🏐🏉🏈🏐'],
+  [...'🏀⚾⚽⚾🎾⚾⚽⚾🎱⚾⚽⚾🏈⚾⚽⚾🏉⚾⚽⚾'],
+];
+const slots = 3;
+const fps = 24;
+const baseCredit = 2217;
+const baseInterval = Math.floor(1e3 / fps);
+const reelLength = reels[0].length;
+const dayInSeconds = 24 * 60 * 60 * 1000;
 
-  constructor(props) {
-    super(props);
-    this.reels = [
-      [...'🏀⚽🎾🏐⚾🏉⚽🎾⚾⚽🎱⚽🏈🎾⚾⚽🏉🏐🎾⚾'],
-      [...'🏀🏈🏐🏈🎾🏈🏐🏈⚽🏈🎱🏈⚾🏐🎾🏈🏐🏉🏈🏐'],
-      [...'🏀⚾⚽⚾🎾⚾⚽⚾🎱⚾⚽⚾🏈⚾⚽⚾🏉⚾⚽⚾']
-    ];
-    this.slots = 3;
-    this.timerIds = [];
+// https://overreacted.io/making-setinterval-declarative-with-react-hooks/
+function useInterval(callback, delay) {
+  const savedCallback = useRef();
 
-    this.clickHandler = this.clickHandler.bind(this);
+  useEffect(() => {
+    savedCallback.current = callback;
+  });
 
-    this.state = {
-      isRunning: false,
-      count: 2217,
-      slotValues: [...'🏀'.repeat(this.slots)],
-      tries: 0,
-      success: 0,
-      direction: 0
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
     }
-  }
 
-  clickHandler(event) {
-    const {isRunning, count, success, tries} = this.state;
-    if (isRunning || count <= 0) {
+    let id = setInterval(tick, delay);
+    return () => clearInterval(id);
+  }, [delay]);
+}
+
+function customEase(current, total) {
+  const currentIncrement = -current + total;
+  if (current === 0) {
+    return total;
+  } else if (current < 8) {
+    return total - 8;
+  } else if (current < 15) {
+    return total - 15;
+  } else if (current < 20) {
+    return total - 20;
+  } else if (current < 23) {
+    return total - 23;
+  }
+  return currentIncrement;
+}
+
+const FruitMachine = () => {
+  const [isRunning, setIsRunning] = useState(false);
+  const [credit, setCredit] = useState(baseCredit);
+  const [slotValues, setSlotValues] = useState([...'🏀'.repeat(slots)]);
+  const [tries, setTries] = useState(0);
+  const [success, setSuccess] = useState(0);
+  const [direction, setDirection] = useState(0);
+
+  const [startTime, setStartTime] = useState(Date.now());
+  const [intervalValue, setIntervalValue] = useState(dayInSeconds);
+
+  const [reelCount, setReelCount] = useState(undefined);
+  const [reelCountRef, setReelCountRef] = useState(undefined);
+  const [maxDuration, setMaxDuration] = useState(6500);
+
+  useInterval(() => {
+    if (isRunning) {
+      setReelCount(reelCount => reelCount.map(val => Math.max(val - 1, 0)));
+
+      if (Date.now() > startTime + maxDuration || reelCount.every(el => el === 0)) {
+        setIsRunning(false);
+        setIntervalValue(dayInSeconds);
+
+        const score = defineScore(slotValues);
+        setCredit(credit => credit + score);
+        setSuccess(success => (score > 0 ? success + 1 : success));
+        setDirection(!!score ? 1 : -1);
+
+        console.log(success, tries);
+
+        console.log(tries, success, success / tries);
+      } else {
+        const keys = reelCount.map((el, idx) => customEase(el, reelCountRef[idx]) % reelLength);
+
+        setSlotValues(() => keys.map((key, idx) => reels[idx][key]));
+      }
+    }
+  }, intervalValue);
+
+  const clickHandler = () => {
+    if (isRunning || credit <= 0) {
       return;
     }
 
-    this.setState(state => ({
-      isRunning: !state.isRunning,
-      count: (state.count - 1),
-      tries: (tries + 1),
-      direction: 0
-    }));
+    setIntervalValue(baseInterval);
+    setStartTime(Date.now());
+    setIsRunning(true);
+    setCredit(credit => credit - 1);
+    setTries(tries => tries + 1);
+    setDirection(0);
 
-    let promises = [];
-    for (let i = 0; i < this.slots; i++) {
-      promises.push(this.runnerPromise(i));
-    }
+    const runDefinition = [1, 2, 3].map(
+      el => Math.floor(Math.random() * reelLength) + el * (fps * 1.5)
+    );
+    setReelCount(runDefinition);
+    setReelCountRef([...runDefinition]);
+    console.log(runDefinition);
+    setMaxDuration(() => runDefinition[2] * Math.round(1000 / fps));
+  };
 
-    Promise.all(promises).then(result => {
-      let score = this.defineScore(result);
-
-      this.setState(state => ({
-        isRunning: false,
-        count: state.count + score,
-        success: score > 0 ? (success + 1): success,
-        direction: !!score ? 1 : -1
-      }));
-
-      console.log(this.state.tries, this.state.success, (this.state.success/this.state.tries))
-    });
-  }
-
-  runnerPromise(id) {
-    let timerId;
-    let newSlotValue;
-    const fps = 24;
-    const baseInterval = Math.floor(1e3 / fps);
-    const reelLength = this.reels[0].length;
-
-    return new Promise((resolve, reject) => {
-      const randomReelIndex = Math.floor(Math.random() * reelLength);
-      // minimum run time is about 1500ms for first reel
-      let totalRunsForSlot = randomReelIndex + ((id + 1) * (fps * 1.5));
-
-      const runner = currentRun => {
-        if (currentRun === totalRunsForSlot) {
-          clearTimeout(timerId);
-          return resolve(newSlotValue);
-        }
-        newSlotValue = this.reels[id][currentRun % reelLength];
-
-        this.setState(state => {
-          state.slotValues[id] = newSlotValue;
-          return state;
-        });
-
-        let nextRun = currentRun + 1;
-        // ease the last 8 steps
-        const isEase = nextRun > (totalRunsForSlot - 8);
-        let interval = baseInterval;
-        if (isEase) {
-          interval = 1e3 / ((totalRunsForSlot - nextRun + 1) * 2.5);
-        }
-
-        timerId = setTimeout(runner, interval, nextRun);
-      };
-
-      runner(0);
-    });
-  }
-
-  defineScore(result) {
-    const res = result.join('');
-    let score = 0;
-
-    switch(true) {
-      case(res === '🏀🏀🏀'):
-        score = 400;
-        break;
-      case(res.startsWith('🏀🏀')):
-        score = 2;
-        break;
-      case(res.startsWith('🏀')):
-        score = 1;
-        break;
-      case(res === '⚽⚽⚽'):
-        score = 14;
-        break;
-      case(res === '🏈🏈🏈'):
-        score = 18;
-        break;
-      case(res === '⚾⚾⚾'):
-        score = 10;
-        break;
-      case(res === '🎾🎾🎾'):
-        score = 50;
-        break;
-      case(/^🏐🏐/.test(res)):
-        score = 5;
-        break;
-      case(res === '🏉🏉🏉'):
-        score = 100;
-        break;
-      case(res === '🎱🎱🎱'):
-        score = 200;
-        break;
-      case(/^🏐/.test(res)):
-        score = 2;
-        break;
-      case(res === '🏈🏈🏀'):
-        score = 18;
-        break;
-      case(res === '⚽⚽🏀'):
-        score = 14;
-        break;
-      case(res === '⚾⚾🏀'):
-        score = 10;
-        break;
-      case(/^🎾🎾/.test(res)):
-        score = 5;
-        break;
-      case(/^🏉/.test(res)):
-        score = 2;
-        break;
-    }
-
-    console.log('score:',score, score * 1e4);
-
-    return score;
-  }
-
-  render() {
-    const {count, slotValues, isRunning, direction} = this.state;
-
-    return (
-      <div className="tank" title="Click or tap the red button">
-        <img src="images/tank_empty.jpg" alt="" />
-        <Slots slotValues={slotValues} />
-        <div className="controls">
-          <div>
-            <h1 itemprop="artist" itemscope itemtype="https://schema.org/Person"><span itemprop="name">ax710.org and y-a-v-a.org</span></h1>
-            <h3 className="title" itemprop="name" lang="en">Three Ball Total Equilibrium Slot Machine <i itemprop="dateCreated" datetime="2020">2020</i></h3>
-            <p className="material"><span itemprop="artMedium">pixels on screen</span><br/><br/>
-              <span>
-                <Credit count={count} direction={direction} />
-                <Button clickHandler={this.clickHandler} isRunning={isRunning} />
-              </span>
-            </p>
-          </div>
-          <div>
-          </div>
-          <Attribution />
+  return (
+    <div className="tank" title="Click or tap the red button">
+      <Image />
+      <Slots slotValues={slotValues} />
+      <div className="controls">
+        <div>
+          <Title />
+          <p className="material">
+            <span itemProp="artMedium">pixels on screen</span>
+            <br />
+            <br />
+            <span>
+              <Credit credit={credit} direction={direction} />
+              <Button clickHandler={clickHandler} isRunning={isRunning} />
+            </span>
+          </p>
         </div>
+        <div></div>
+        <Attribution />
       </div>
-    )
-  }
-}
+    </div>
+  );
+};
 
 export default FruitMachine;

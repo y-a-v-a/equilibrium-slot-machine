@@ -3,13 +3,12 @@
  */
 import React from 'react';
 
-class Credit extends React.Component {
-  render() {
-    const scoreClassName = this.props.direction === 1 ? 'increase' : this.props.direction === -1 ? 'decrease' : '';
-    return (
-      <span className={`credit ${ scoreClassName }`}>${(this.props.count * 1e4).toLocaleString('en-US')}</span>
-    );
-  }
-}
+const Credit = ({ direction, credit }) => {
+  const scoreClassName = direction === 1 ? 'increase' : direction === -1 ? 'decrease' : '';
 
-export default Credit;
+  return (
+    <span className={`credit ${scoreClassName}`}>${(credit * 1e4).toLocaleString('en-US')}</span>
+  );
+};
+
+export default React.memo(Credit);
