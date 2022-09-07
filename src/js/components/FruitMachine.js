@@ -171,9 +171,9 @@ class FruitMachine extends React.Component {
         <Slots slotValues={slotValues} />
         <div className="controls">
           <div>
-            <h1>ax710.org and y-a-v-a.org</h1>
-            <h3 className="title">Three Ball Total Equilibrium Slot Machine <i>2020</i></h3>
-            <p className="material">pixels on screen<br/><br/>
+            <h1 itemprop="artist" itemscope itemtype="https://schema.org/Person"><span itemprop="name">ax710.org and y-a-v-a.org</span></h1>
+            <h3 className="title" itemprop="name" lang="en">Three Ball Total Equilibrium Slot Machine <i itemprop="dateCreated" datetime="2020">2020</i></h3>
+            <p className="material"><span itemprop="artMedium">pixels on screen</span><br/><br/>
               <span>
                 <Credit count={count} direction={direction} />
                 <Button clickHandler={this.clickHandler} isRunning={isRunning} />

@@ -19,9 +19,9 @@ export default class Attribution extends React.PureComponent {
         </a>
         <br/>CC&nbsp;BY-SA&nbsp;4.0&nbsp;
         <a href="https://creativecommons.org/licenses/by-sa/4.0">
-          <img style={{height:"1em",marginLeft: "3px",verticalAlign:"text-bottom"}} src="https://search.creativecommons.org/static/img/cc_icon.svg" />
-          <img style={{height:"1em",marginLeft: "3px",verticalAlign:"text-bottom"}} src="https://search.creativecommons.org/static/img/cc-by_icon.svg" />
-          <img style={{height:"1em",marginLeft: "3px",verticalAlign:"text-bottom"}} src="https://search.creativecommons.org/static/img/cc-sa_icon.svg" />
+          <img style={{height:"1em",marginLeft: "3px",verticalAlign:"text-bottom"}} src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" />
+          <img style={{height:"1em",marginLeft: "3px",verticalAlign:"text-bottom"}} src="https://mirrors.creativecommons.org/presskit/icons/by.svg" />
+          <img style={{height:"1em",marginLeft: "3px",verticalAlign:"text-bottom"}} src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" />
         </a>
       </p>
     </div>);

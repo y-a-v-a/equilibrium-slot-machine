@@ -6,7 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode production",
-    "dev": "webpack --mode development --watch"
+    "dev": "webpack --mode development --watch",
+    "postbuild": "react-snap"
+  },
+  "reactSnap": {
+    "source": "dist"
   },
   "browserslist": [
     "defaults",
@@ -33,6 +37,7 @@
     "postcss-safe-parser": "^4.0.2",
     "react": "16.9.0",
     "react-dom": "16.13.1",
+    "react-snap": "^1.23.0",
     "style-loader": "^1.2.1",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
