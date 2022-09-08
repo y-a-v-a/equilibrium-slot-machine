@@ -2,7 +2,7 @@
  * @author Vincent Bruijn <vebruijn@gmail.com>
  */
 import React from 'react';
-import Slot from './Slot';
+import Slot from './Slot.jsx';
 
 const Slots = ({ slotValues }) => (
   <>

@@ -8,7 +8,7 @@ import tank_l from './images/tank_back_landscape.jpg';
 
 import React from 'react';
 import { hydrateRoot, createRoot } from 'react-dom/client';
-import FruitMachine from './js/components/FruitMachine';
+import FruitMachine from './js/components/FruitMachine.jsx';
 
 const rootElement = document.getElementById('fruitmachine');
 

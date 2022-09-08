@@ -2,12 +2,12 @@
  * @author Vincent Bruijn <vebruijn@gmail.com>
  */
 import React, { useEffect, useRef, useState } from 'react';
-import Credit from './Credit';
-import Button from './Button';
-import Slots from './Slots';
-import Attribution from './Attribution';
-import Title from './Title';
-import Image from './Image';
+import Credit from './Credit.jsx';
+import Button from './Button.jsx';
+import Slots from './Slots.jsx';
+import Attribution from './Attribution.jsx';
+import Title from './Title.jsx';
+import Image from './Image.jsx';
 import { defineScore } from '../utils/defineScore.js';
 
 const reels = [
