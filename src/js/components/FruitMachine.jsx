@@ -45,13 +45,13 @@ function customEase(current, total) {
   if (current === 0) {
     return total;
   } else if (current < 8) {
-    return total - 8;
+    return total - 21;
   } else if (current < 15) {
-    return total - 15;
-  } else if (current < 20) {
-    return total - 20;
-  } else if (current < 23) {
+    return total - 22;
+  } else if (current < 19) {
     return total - 23;
+  } else if (current < 23) {
+    return total - 24;
   }
   return currentIncrement;
 }
@@ -73,22 +73,27 @@ const FruitMachine = () => {
 
   useInterval(() => {
     if (isRunning) {
-      setReelCount(reelCount => reelCount.map(val => Math.max(val - 1, 0)));
+      setReelCount((reelCount) => reelCount.map((val) => Math.max(val - 1, 0)));
 
-      if (Date.now() > startTime + maxDuration || reelCount.every(el => el === 0)) {
+      if (
+        Date.now() > startTime + maxDuration ||
+        reelCount.every((el) => el === 0)
+      ) {
         setIsRunning(false);
         setIntervalValue(dayInSeconds);
 
         const score = defineScore(slotValues);
-        setCredit(credit => credit + score);
-        setSuccess(success => (score > 0 ? success + 1 : success));
+        setCredit((credit) => credit + score);
+        setSuccess((success) => (score > 0 ? success + 1 : success));
         setDirection(!!score ? 1 : -1);
 
         console.log(success, tries);
 
         console.log(tries, success, success / tries);
       } else {
-        const keys = reelCount.map((el, idx) => customEase(el, reelCountRef[idx]) % reelLength);
+        const keys = reelCount.map(
+          (el, idx) => customEase(el, reelCountRef[idx]) % reelLength
+        );
 
         setSlotValues(() => keys.map((key, idx) => reels[idx][key]));
       }
@@ -103,12 +108,12 @@ const FruitMachine = () => {
     setIntervalValue(baseInterval);
     setStartTime(Date.now());
     setIsRunning(true);
-    setCredit(credit => credit - 1);
-    setTries(tries => tries + 1);
+    setCredit((credit) => credit - 1);
+    setTries((tries) => tries + 1);
     setDirection(0);
 
     const runDefinition = [1, 2, 3].map(
-      el => Math.floor(Math.random() * reelLength) + el * (fps * 1.5)
+      (el) => Math.floor(Math.random() * reelLength) + el * (fps * 1.5)
     );
     setReelCount(runDefinition);
     setReelCountRef([...runDefinition]);

@@ -1,13 +1,13 @@
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-// const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const WebpackFavicons = require('webpack-favicons');
 
 const devMode = false;
 
 module.exports = {
   output: {
-    path: '/Users/nlbruiv/Projects/equilibrium-slot-machine/dist',
+    path: __dirname + '/dist',
   },
   module: {
     rules: [
@@ -51,24 +51,21 @@ module.exports = {
       template: './src/index.html',
       filename: './index.html',
     }),
-    // new FaviconsWebpackPlugin({
-    //   logo: './basket-ball-spalding-3.png',
-    //   prefix: '',
-    //   cache: true,
-    //   favicons: {
-    //     path: '',
-    //     appName: 'Three Ball Total Equilibrium Slot Machine',
-    //     appShortName: 'Three Ball Slot Machine',
-    //     developerName: 'ax710 and y-a-v-a',
-    //     developerURL: 'http://www.infrath.in',
-    //     appleStatusBarStyle: 'black',
-    //     start_url: '/',
-    //     icons: {
-    //       appleStartup: false,
-    //       yandex: false,
-    //       coast: false
-    //     }
-    //   }
-    // }),
+    new WebpackFavicons({
+      src: './basket-ball-spalding-3.png',
+      path: '',
+      appName: 'Three Ball Total Equilibrium Slot Machine',
+      appShortName: 'Three Ball Slot Machine',
+      developerURL: 'http://www.infrath.in',
+      appleStatusBarStyle: 'black',
+      start_url: '/',
+      icons: {
+        yandex: false,
+        coast: false,
+        appleStartup: false,
+        appleIcon: true,
+        android: true,
+      },
+    }),
   ],
 };
